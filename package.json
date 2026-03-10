@@ -1,0 +1,65 @@
+{
+  "name": "crossplay-solver-app",
+  "version": "1.0.0",
+  "description": "Crossplay highest-score solver web app with Electron packaging",
+  "author": "Lucas",
+  "main": "src/electron/main.js",
+  "type": "module",
+  "scripts": {
+    "start": "node src/server.js",
+    "web:dev": "node src/server.js",
+    "web:build": "node scripts/build-web.mjs",
+    "electron:dev": "npm.cmd run web:build && electron .",
+    "win:dist": "set CSC_IDENTITY_AUTO_DISCOVERY=false&& npm.cmd run web:build && electron-builder --win nsis portable",
+    "test": "node --test"
+  },
+  "dependencies": {
+    "express": "^4.21.2"
+  },
+  "devDependencies": {
+    "electron": "^35.1.4",
+    "electron-builder": "^25.1.8",
+    "png-to-ico": "^3.0.1",
+    "rcedit": "^5.0.2"
+  },
+  "build": {
+    "appId": "com.local.crossplaysolver",
+    "productName": "Crossplay Solver",
+    "asar": true,
+    "files": [
+      "src/**/*",
+      "dist-web/**/*",
+      "ENABLE2K.txt",
+      "package.json"
+    ],
+    "extraResources": [
+      {
+        "from": "ENABLE2K.txt",
+        "to": "dictionary/ENABLE2K.txt"
+      },
+      {
+        "from": "build/icon.ico",
+        "to": "icon.ico"
+      }
+    ],
+    "win": {
+      "target": [
+        "nsis",
+        "portable"
+      ],
+      "signAndEditExecutable": false,
+      "icon": "icon.ico"
+    },
+    "nsis": {
+      "artifactName": "${productName}-${version}-installer-${arch}.${ext}",
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true,
+      "createStartMenuShortcut": true,
+      "shortcutName": "Crossplay Solver"
+    },
+    "portable": {
+      "artifactName": "${productName}-${version}-portable-${arch}.${ext}"
+    },
+    "afterPack": "scripts/after-pack-icon.mjs"
+  }
+}

@@ -1,0 +1,8 @@
+node_modules/
+dist/
+dist-web/
+*.log
+NWL2023.txt
+README.local.backup.md
+CrossplaySolverData/
+*.tmp

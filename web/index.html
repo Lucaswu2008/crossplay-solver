@@ -1,0 +1,120 @@
+﻿<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Crossplay Solver</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Nunito:wght@500;700;800&family=Source+Serif+4:wght@500;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body data-theme="light">
+    <div class="app-layout">
+      <section class="play-surface" aria-label="Crossplay board editor">
+        <header class="surface-header">
+          <div>
+            <h1>Crossplay Solver</h1>
+            <p>Build a board state and rack, then find the exact highest-scoring moves.</p>
+          </div>
+          <div class="header-controls">
+            <div class="header-tools">
+              <div class="selected-pill">
+                Selected: <strong id="selectedCellLabel">None</strong>
+              </div>
+              <div class="history-controls" role="group" aria-label="History">
+                <button id="undoButton" class="history-button" type="button" title="Undo (Ctrl+Z)">Undo</button>
+                <button id="redoButton" class="history-button" type="button" title="Redo (Ctrl+Shift+Z)">Redo</button>
+              </div>
+              <div class="theme-toggle" role="group" aria-label="Theme">
+                <button id="themeLight" class="theme-button" type="button" data-theme="light">Light</button>
+                <button id="themeDark" class="theme-button" type="button" data-theme="dark">Dark</button>
+              </div>
+            </div>
+            <div class="saved-games-controls" aria-label="Saved boards">
+              <select id="savedGameSelect" class="saved-game-select" aria-label="Select saved board"></select>
+              <button id="addGameButton" class="saved-game-button" type="button">New</button>
+              <button id="renameGameButton" class="saved-game-button" type="button">Rename</button>
+              <button id="deleteGameButton" class="saved-game-button" type="button">Delete</button>
+            </div>
+          </div>
+        </header>
+
+        <div class="board-wrapper">
+          <div id="board" class="board" aria-label="Crossplay board"></div>
+        </div>
+
+        <div class="rack-section">
+          <div class="rack-header">
+            <h2>Rack</h2>
+            <span>Use A-Z or ? for blank tiles</span>
+          </div>
+          <div id="rack" class="rack" aria-label="Rack"></div>
+        </div>
+
+        <div class="editor-controls">
+          <button id="solveButton" class="primary-button" type="button" disabled>Find Best Moves</button>
+          <button id="clearBoard" class="secondary-button" type="button">Clear Board</button>
+          <button id="clearRack" class="secondary-button" type="button">Clear Rack</button>
+        </div>
+        <p class="editor-help">Instructions: click a board cell then type A-Z. Use ? in rack for blank tiles. Right-click a board tile (or press *) to mark it as blank (0 points).</p>
+      </section>
+
+      <section class="analysis-surface" aria-label="Move analysis">
+        <div class="analysis-top">
+          <div>
+            <div class="key-turn-label">Best Move</div>
+            <div class="key-turn-title" id="keyTurnTitle">Run solver to analyze this position</div>
+          </div>
+          <label class="sweep-control">
+            Sweep Bonus
+            <input id="sweepBonus" type="number" min="0" step="1" value="40" />
+          </label>
+        </div>
+
+        <div class="analysis-body">
+          <h2>Suggested Moves</h2>
+          <p id="analysisCopy">Press Find Best Moves to analyze your current position.</p>
+
+          <div class="analysis-meta">
+            <div id="resultMeta" class="result-meta"></div>
+            <div class="dictionary-picker">
+              <label for="dictionarySelect" class="dictionary-picker-label">Dictionary</label>
+              <div class="dictionary-picker-controls">
+                <select id="dictionarySelect" class="dictionary-select" aria-label="Dictionary selector">
+                  <option>Loading...</option>
+                </select>
+                <button id="dictionaryUploadButton" class="dictionary-upload-button" type="button">Load TXT</button>
+                <input id="dictionaryFileInput" type="file" accept=".txt,text/plain" hidden />
+              </div>
+            </div>
+          </div>
+          <p id="analysisInstructions" class="analysis-instructions"></p>
+
+          <div class="moves-header" role="presentation">
+            <span>MOVE</span>
+            <span>POINTS</span>
+          </div>
+
+          <div class="moves-scroll">
+            <table class="moves-table" aria-label="Top moves">
+              <tbody id="resultsList"></tbody>
+            </table>
+          </div>
+
+          <div class="simulation-card">
+            <h3>Move Details</h3>
+            <div id="moveDetail">
+              <p>Run the solver, then select a move to inspect details.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
+
+    <script src="./app.js" type="module"></script>
+  </body>
+</html>
